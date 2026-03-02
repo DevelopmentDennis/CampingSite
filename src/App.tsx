@@ -14,7 +14,7 @@ const App = () => (
         {/* serve the static privacy page */}
         <Route
           path="/privacy"
-          element={<Navigate to="/Privacy.html" replace />}
+          element={<Navigate to="/privacy.html" replace />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
