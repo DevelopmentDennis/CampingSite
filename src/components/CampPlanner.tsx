@@ -8,6 +8,7 @@ import {
 import { GripVertical, Download, Tent } from "lucide-react";
 import { motion } from "framer-motion";
 import jsPDF from "jspdf";
+import { Link } from "react-router-dom"; // added for footer link
 
 interface CampItem {
   id: string;
@@ -206,6 +207,13 @@ export default function CampPlanner() {
           </button>
         </motion.div>
       </main>
+      <footer className="text-center text-sm text-muted-foreground mt-12 mb-6">
+        &copy; {new Date().getFullYear()} Camp Trip Planner. All rights
+        reserved. <br />
+        <Link to="/privacy.html" className="underline hover:text-primary">
+          Privacy Policy
+        </Link>
+      </footer>
     </div>
   );
 }
