@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 30% 96%;
+    --foreground: 150 30% 15%;
+
+    --card: 45 40% 94%;
+    --card-foreground: 150 30% 15%;
+
+    --popover: 45 40% 94%;
+    --popover-foreground: 150 30% 15%;
+
+    --primary: 145 45% 32%;
+    --primary-foreground: 45 30% 96%;
+
+    --secondary: 28 80% 55%;
+    --secondary-foreground: 45 30% 96%;
+
+    --muted: 45 20% 88%;
+    --muted-foreground: 150 15% 40%;
+
+    --accent: 28 80% 55%;
+    --accent-foreground: 45 30% 96%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 150 15% 80%;
+    --input: 150 15% 80%;
+    --ring: 145 45% 32%;
+
+    --radius: 0.75rem;
+
+    --camp-sky: 200 60% 85%;
+    --camp-earth: 30 30% 40%;
+    --camp-sun: 45 90% 60%;
+    --camp-fire: 15 85% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Nunito", sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Fredoka", sans-serif;
+  }
+}
