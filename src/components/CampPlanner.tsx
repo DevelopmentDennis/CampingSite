@@ -210,7 +210,7 @@ export default function CampPlanner() {
       <footer className="text-center text-sm text-muted-foreground mt-12 mb-6">
         &copy; {new Date().getFullYear()} Camp Trip Planner. All rights
         reserved. <br />
-        <Link to="/privacy.html" className="underline hover:text-primary">
+        <Link to="/privacy" className="underline hover:text-primary">
           Privacy Policy
         </Link>
       </footer>
