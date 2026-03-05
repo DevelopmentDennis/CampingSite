@@ -196,7 +196,7 @@ export default function CampPlanner() {
         doc.setFont("helvetica", "bold");
         doc.text(`${index + 1}.`, 20, y);
         doc.setFont("helvetica", "normal");
-        doc.text(`${item.emoji}  ${getDisplayLabel(item)}`, 30, y);
+        doc.text(`${getDisplayLabel(item)}`, 30, y);
       });
     }
 
@@ -301,10 +301,8 @@ export default function CampPlanner() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
               className={`rounded-2xl border border-border bg-card p-4 shadow-lg ${
-                isDragging || mobileTab === "source"
-                  ? "block"
-                  : "hidden md:block"
-              } md:col-span-2 xl:col-span-1`}
+                mobileTab === "source" ? "block" : "hidden"
+              } md:block md:col-span-2 xl:col-span-1`}
             >
               <div className="mb-4">
                 <h2 className="text-lg font-bold text-foreground">
@@ -368,10 +366,8 @@ export default function CampPlanner() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.4 + zoneIndex * 0.1 }}
                 className={`rounded-2xl border border-border bg-card p-4 shadow-lg ${
-                  isDragging || mobileTab === zoneId
-                    ? "block"
-                    : "hidden md:block"
-                }`}
+                  mobileTab === zoneId ? "block" : "hidden"
+                } md:block`}
               >
                 <div className="mb-4 flex items-start justify-between gap-3">
                   <div>

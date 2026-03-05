@@ -1,5 +1,5 @@
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
-import { GripVertical, PencilLine } from "lucide-react";
+import { GripVertical } from "lucide-react";
 import type { CampItem } from "./types";
 
 interface EditableCampCardProps {
@@ -72,11 +72,7 @@ export default function EditableCampCard({
           </div>
 
           {item.isCustom ? (
-            <label className="mt-3 block">
-              <span className="mb-1 flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                <PencilLine className="h-3.5 w-3.5" />
-                Custom name
-              </span>
+            <label className="mt-1 block">
               <input
                 type="text"
                 value={item.customName ?? ""}
