@@ -8,7 +8,7 @@ const App = () => (
       <Route path="/" element={<Index />} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       {/* serve the static privacy page */}
-      <Route path="/privacy" element={<Navigate to="/privacy" replace />} />
+      <Route path="/privacy" element={<Navigate to="/privacy" />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>

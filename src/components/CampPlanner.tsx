@@ -10,6 +10,9 @@ import { motion } from "framer-motion";
 import jsPDF from "jspdf";
 import EditableCampCard from "./camp-planner/EditableCampCard";
 import type { CampItem, ZoneId } from "./camp-planner/types";
+// <Link> isn’t needed for the privacy footer, a normal anchor keeps
+// the router from intercepting the click.
+import type { LinkProps } from "react-router-dom"; /* keep types if used elsewhere */
 
 const SOURCE_ITEMS: CampItem[] = [
   { id: "shelter", label: "Shelter & Tents", emoji: "⛺" },
@@ -453,6 +456,13 @@ export default function CampPlanner() {
           </button>
         </motion.div>
       </main>
+      <footer className="text-center text-sm text-muted-foreground mt-12 mb-6">
+        {new Date().getFullYear()} Camp Trip Planner.
+        <br />
+        <a href="/privacy.html" className="underline hover:text-primary">
+          Privacy Policy
+        </a>
+      </footer>
     </div>
   );
 }
