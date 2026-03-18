@@ -27,9 +27,9 @@ export default function EditableCampCard({
   onMove,
 }: EditableCampCardProps) {
   const mobileActions = [
-    { zone: "source" as const, label: "Ideas" },
-    { zone: "unnecessary" as const, label: "Unnecessary" },
-    { zone: "needed" as const, label: "Needed" },
+    { zone: "source" as const, label: "Ideen" },
+    { zone: "unnecessary" as const, label: "Unnötig" },
+    { zone: "needed" as const, label: "Erforderlich" },
   ].filter((action) => action.zone !== currentZone);
 
   return (
@@ -61,14 +61,12 @@ export default function EditableCampCard({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            {!item.isCustom && (
-              <>
-                <span className="text-xl leading-none">{item.emoji}</span>
-                <span className="font-semibold text-foreground">
-                  {item.label}
-                </span>
-              </>
-            )}
+            <>
+              <span className="text-xl leading-none">{item.emoji}</span>
+              <span className="font-semibold text-foreground">
+                {item.label}
+              </span>
+            </>
           </div>
 
           {item.isCustom ? (
@@ -79,7 +77,7 @@ export default function EditableCampCard({
                 onChange={(e) => onCustomNameChange(item.id, e.target.value)}
                 onPointerDown={(e) => e.stopPropagation()}
                 onKeyDown={(e) => e.stopPropagation()}
-                placeholder="Name this camp idea"
+                placeholder="Daten eingeben..."
                 className="w-full rounded-xl border border-input bg-card px-3 py-2 text-sm font-medium text-foreground placeholder:text-muted-foreground/55 focus:outline-none focus:ring-2 focus:ring-ring"
               />
             </label>

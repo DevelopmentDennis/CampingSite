@@ -15,28 +15,35 @@ import type { CampItem, ZoneId } from "./camp-planner/types";
 import type { LinkProps } from "react-router-dom"; /* keep types if used elsewhere */
 
 const SOURCE_ITEMS: CampItem[] = [
-  { id: "shelter", label: "Shelter & Tents", emoji: "⛺" },
-  { id: "food", label: "Food & Cooking", emoji: "🍳" },
-  { id: "water", label: "Water Supply", emoji: "💧" },
-  { id: "firstaid", label: "First Aid Kit", emoji: "🩹" },
-  { id: "navigation", label: "Map & Navigation", emoji: "🗺️" },
-  { id: "campfire", label: "Campfire", emoji: "🔥" },
-  { id: "games", label: "Games & Activities", emoji: "🏸" },
-  { id: "nature", label: "Nature Exploration", emoji: "🌿" },
-  { id: "safety", label: "Safety Rules", emoji: "🛡️" },
-  { id: "teamwork", label: "Teamwork & Roles", emoji: "🤝" },
-  { id: "cleanup", label: "Clean-Up Plan", emoji: "🧹" },
-  { id: "weather", label: "Weather Prep", emoji: "🌦️" },
+  { id: "shelter", label: "Unterkunft & Zelte", emoji: "⛺" },
+  { id: "food", label: "Essen & Kochen", emoji: "🍳" },
+  { id: "water", label: "Wasserversorgung", emoji: "💧" },
+  { id: "firstaid", label: "Erste-Hilfe-Set", emoji: "🩹" },
+  { id: "navigation", label: "Karte & Navigation", emoji: "🗺️" },
+  { id: "campfire", label: "Lagerfeuer", emoji: "🔥" },
+  { id: "games", label: "Spiele & Aktivitäten", emoji: "🏸" },
+  { id: "nature", label: "Naturerkundung", emoji: "🌿" },
+  { id: "safety", label: "Sicherheitsregeln", emoji: "🛡️" },
+  { id: "teamwork", label: "Teamwork & Rollen", emoji: "🤝" },
+  { id: "cleanup", label: "Aufräumplan", emoji: "🧹" },
+  { id: "weather", label: "Wettervorbereitung", emoji: "🌦️" },
   {
     id: "custom-1",
-    label: "Custom Idea",
-    emoji: "✨",
+    label: "TN-Preis",
+    emoji: "📝",
     isCustom: true,
     customName: "",
   },
   {
     id: "custom-2",
-    label: "Special Item",
+    label: "Motto",
+    emoji: "📝",
+    isCustom: true,
+    customName: "",
+  },
+  {
+    id: "custom-3",
+    label: "Zeitraum",
     emoji: "📝",
     isCustom: true,
     customName: "",
@@ -63,12 +70,12 @@ const ZONE_COPY: Record<
   { title: string; subtitle: string }
 > = {
   unnecessary: {
-    title: "Unnecessary",
-    subtitle: "Nice extras or low-priority ideas.",
+    title: "Unnötig",
+    subtitle: "Schöne Extras oder unwichtige Ideen.",
   },
   needed: {
-    title: "Absolutely Needed",
-    subtitle: "These items will be exported to the PDF.",
+    title: "Wichtig",
+    subtitle: "Diese Elemente werden in das PDF exportiert.",
   },
 };
 
@@ -174,7 +181,7 @@ export default function CampPlanner() {
   }, []);
 
   const handleDownload = useCallback(() => {
-    const name = campName.trim() || "My Camping Trip";
+    const name = campName.trim() || "Meine Campingfahrt";
     const doc = new jsPDF();
 
     doc.setFont("helvetica", "bold");
@@ -183,12 +190,12 @@ export default function CampPlanner() {
 
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
-    doc.text("Absolutely Needed for this camp:", 20, 42);
+    doc.text("Absolut erforderlich für dieses Camp:", 20, 42);
 
     if (neededItems.length === 0) {
       doc.setFontSize(12);
       doc.text(
-        "No items have been placed in the Absolutely Needed zone yet.",
+        "Es wurden noch keine Elemente in die Zone 'Absolut erforderlich' platziert.",
         20,
         56,
       );
@@ -196,16 +203,19 @@ export default function CampPlanner() {
       doc.setFontSize(13);
       neededItems.forEach((item, index) => {
         const y = 55 + index * 12;
-        doc.setFont("helvetica", "bold");
-        doc.text(`${index + 1}.`, 20, y);
-        doc.setFont("helvetica", "normal");
-        doc.text(`${getDisplayLabel(item)}`, 30, y);
+        if (item.isCustom) {
+          doc.setFont("helvetica", "italic");
+          doc.text(`${item.label}:   ${getDisplayLabel(item)}`, 30, y);
+        } else {
+          doc.setFont("helvetica", "normal");
+          doc.text(`${getDisplayLabel(item)}`, 30, y);
+        }
       });
     }
 
     doc.setFontSize(9);
     doc.setTextColor(120, 120, 120);
-    doc.text("Created with Camp Trip Planner", 105, 285, { align: "center" });
+    doc.text("Erstellt mit Camp Trip Planner", 105, 285, { align: "center" });
     doc.save(`${name.replace(/\s+/g, "_")}.pdf`);
   }, [campName, getDisplayLabel, neededItems]);
 
@@ -230,7 +240,7 @@ export default function CampPlanner() {
           animate={{ y: 0, opacity: 1 }}
           className="relative z-10 text-4xl font-bold md:text-5xl"
         >
-          🏕️ Camp Trip Planner
+          🏕️ Camping Trip planen
         </motion.h1>
         <motion.p
           initial={{ y: 10, opacity: 0 }}
@@ -238,7 +248,8 @@ export default function CampPlanner() {
           transition={{ delay: 0.15 }}
           className="relative z-10 mt-2 text-lg opacity-90"
         >
-          Drag camp ideas into the two zones and decide what really matters.
+          Ziehen Sie Campideen in die zwei Zonen und entscheiden Sie, was
+          wirklich wichtig ist.
         </motion.p>
       </header>
 
@@ -253,12 +264,12 @@ export default function CampPlanner() {
             htmlFor="camp-name"
             className="mb-1.5 block text-sm font-semibold text-muted-foreground"
           >
-            Name your camp
+            Gib deinem Camp einen Namen
           </label>
           <input
             id="camp-name"
             type="text"
-            placeholder="e.g. Eagle Mountain Adventure"
+            placeholder="z.B. Tom's Abenteuer-Camp 2024"
             value={campName}
             onChange={(e) => setCampName(e.target.value)}
             className="w-full rounded-xl border border-input bg-background px-4 py-3 text-lg font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring"
@@ -272,9 +283,9 @@ export default function CampPlanner() {
           <div className="mb-4 flex gap-2 overflow-x-auto rounded-2xl border border-border bg-card p-2 shadow-lg md:hidden">
             {(
               [
-                { id: "source", label: "Ideas" },
-                { id: "unnecessary", label: "Unnecessary" },
-                { id: "needed", label: "Absolutely Needed" },
+                { id: "source", label: "Ideen" },
+                { id: "unnecessary", label: "Unnötig" },
+                { id: "needed", label: "Absolut erforderlich" },
               ] as const
             ).map((tab) => (
               <button
@@ -294,8 +305,8 @@ export default function CampPlanner() {
 
           <div className="mb-4 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-medium text-muted-foreground shadow-lg md:hidden">
             {isDragging
-              ? "Reorder mode active — drag to change the order inside the current zone, or use the card buttons to move between zones."
-              : "Tip: use the buttons on each card to move items between zones, or drag to reorder within a zone."}
+              ? "Umordnungsmodus aktiv — ziehen Sie, um die Reihenfolge in der aktuellen Zone zu ändern, oder verwenden Sie die Kartenschaltflächen, um zwischen Zonen zu wechseln."
+              : "Tipp: Verwenden Sie die Schaltflächen auf jeder Karte, um Elemente zwischen Zonen zu verschieben, oder ziehen Sie, um die Reihenfolge in einer Zone zu ändern."}
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-[1.1fr_1fr_1fr]">
@@ -309,10 +320,11 @@ export default function CampPlanner() {
             >
               <div className="mb-4">
                 <h2 className="text-lg font-bold text-foreground">
-                  Camp Ideas Pool
+                  Camp-Ideenpool
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Start here, then drag each item into a decision zone.
+                  Beginne hier, und ziehe dann jedes Element in eine
+                  Entscheidungszone.
                 </p>
               </div>
 
@@ -399,8 +411,8 @@ export default function CampPlanner() {
                     >
                       {zones[zoneId].length === 0 ? (
                         <div className="flex min-h-[16rem] items-center justify-center rounded-xl border border-border/70 bg-card/60 px-6 text-center text-sm font-medium text-muted-foreground xl:min-h-[20rem]">
-                          Drop camp items here or use the move buttons on
-                          mobile.
+                          Lege die Campelemente hier ab oder verwende die
+                          Bewegen-Schaltflächen auf Mobilgeräten.
                         </div>
                       ) : (
                         <div className="space-y-3">
@@ -452,7 +464,7 @@ export default function CampPlanner() {
             className="inline-flex items-center gap-2 rounded-xl bg-secondary px-8 py-4 text-lg font-bold text-secondary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-secondary/90 active:scale-95"
           >
             <Download className="h-5 w-5" />
-            Download Needed Items PDF
+            PDF herunterladen
           </button>
         </motion.div>
       </main>
@@ -460,7 +472,7 @@ export default function CampPlanner() {
         {new Date().getFullYear()} Camp Trip Planner.
         <br />
         <a href="/privacy.html" className="underline hover:text-primary">
-          Privacy Policy
+          Datenschutzerklärung
         </a>
       </footer>
     </div>
