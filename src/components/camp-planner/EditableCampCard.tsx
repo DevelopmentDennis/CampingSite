@@ -1,6 +1,8 @@
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 import { GripVertical } from "lucide-react";
 import type { CampItem } from "./types";
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface EditableCampCardProps {
   item: CampItem;
@@ -31,6 +33,8 @@ export default function EditableCampCard({
     { zone: "unnecessary" as const, label: "Unnötig" },
     { zone: "needed" as const, label: "Erforderlich" },
   ].filter((action) => action.zone !== currentZone);
+
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div
@@ -66,9 +70,27 @@ export default function EditableCampCard({
               <span className="font-semibold text-foreground">
                 {item.label}
               </span>
+              {item.isExpandable && isExpanded && (
+                <ChevronDown
+                  className="ml-auto h-8 w-8 cursor-pointer text-muted-foreground"
+                  onClick={() => setIsExpanded(false)}
+                />
+              )}
+              {item.isExpandable && !isExpanded && (
+                <ChevronUp
+                  className="ml-auto h-8 w-8 cursor-pointer rotate-180 text-muted-foreground"
+                  onClick={() => setIsExpanded(true)}
+                />
+              )}
             </>
           </div>
-
+          {isExpanded && item.expandedContent && (
+            <div className="mt-2 rounded-md bg-muted/50 px-2 py-1 text-sm text-muted-foreground">
+              {item.expandedContent.split("\n").map((line, idx) => (
+                <p key={idx}>{line}</p>
+              ))}
+            </div>
+          )}
           {item.isCustom ? (
             <label className="mt-1 block">
               <input
