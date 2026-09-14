@@ -18,6 +18,15 @@ interface FormBuilderStepperProps {
 type StepZones = Record<ZoneId, CampItem[]>;
 type MultiStepZones = Record<number, StepZones>;
 
+function shuffleArray<T>(items: T[]): T[] {
+  const shuffled = [...items];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 const ZONE_COPY: Record<
   Exclude<ZoneId, "source">,
   { title: string; subtitle: string }
@@ -44,7 +53,7 @@ export default function FormBuilderStepper({
     const initialZones: MultiStepZones = {};
     FORM_SECTIONS.forEach((section) => {
       initialZones[section.id] = {
-        source: section.fields,
+        source: shuffleArray(section.fields),
         unnecessary: [],
         needed: [],
       };
@@ -510,6 +519,16 @@ export default function FormBuilderStepper({
           </button>
         </motion.div>
       </main>
+      <footer className="text-center text-sm text-muted-foreground mt-12 mb-6">
+        {new Date().getFullYear()} Camp Trip Planner
+        <br />
+        <a href="/privacy.html" className="underline hover:text-primary mr-2">
+          Datenschutzerklärung
+        </a>
+        <a href="/imprint.html" className="underline hover:text-primary ml-2">
+          Impressum
+        </a>
+      </footer>
     </div>
   );
 }
