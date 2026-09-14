@@ -1,5 +1,8 @@
 export type ZoneId = "source" | "unnecessary" | "needed";
 
+// Determines how the field is rendered as a fillable entry on the exported PDF
+export type AnswerType = "text" | "yesno" | "multiselect";
+
 export interface CampItem {
   id: string;
   label?: string;
@@ -8,6 +11,7 @@ export interface CampItem {
   customName?: string;
   isExpandable?: boolean;
   expandedContent?: string;
+  answerType?: AnswerType;
 }
 
 // Multi-step state management

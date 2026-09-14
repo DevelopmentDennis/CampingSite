@@ -40,7 +40,7 @@ export default function CampPlanner() {
   const handleDownload = useCallback(() => {
     if (!exportState.neededFieldsByStep) return;
 
-    const name = campName.trim() || "Mein Zeltlager Formular";
+    const name = campName.trim();
     const doc = new jsPDF();
 
     doc.setFont("helvetica", "bold");
@@ -53,6 +53,21 @@ export default function CampPlanner() {
     let yPosition = 45;
     const pageHeight = doc.internal.pageSize.getHeight();
     const bottomMargin = 15;
+    const leftMargin = 20;
+    const fieldIndent = 30;
+    const checkboxSize = 4;
+
+    const ensureSpace = (needed: number) => {
+      if (yPosition + needed > pageHeight - bottomMargin) {
+        doc.addPage();
+        yPosition = 15;
+      }
+    };
+
+    const drawCheckbox = (x: number, y: number, text: string) => {
+      doc.rect(x, y - checkboxSize + 1, checkboxSize, checkboxSize);
+      doc.text(text, x + checkboxSize + 2, y);
+    };
 
     // Iterate through all steps and their needed fields
     Object.entries(exportState.neededFieldsByStep).forEach(
@@ -61,35 +76,50 @@ export default function CampPlanner() {
         if (!section || items.length === 0) return;
 
         // Add section title if there's space
-        if (yPosition + 8 > pageHeight - bottomMargin) {
-          doc.addPage();
-          yPosition = 15;
-        }
+        ensureSpace(8);
 
         doc.setFont("helvetica", "bold");
         doc.setFontSize(12);
-        doc.text(section.title, 20, yPosition);
+        doc.text(section.title, leftMargin, yPosition);
         yPosition += 8;
 
         // Add fields in this section
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-
         items.forEach((item) => {
-          if (yPosition + 6 > pageHeight - bottomMargin) {
-            doc.addPage();
-            yPosition = 15;
-          }
+          const displayLabel =
+            item.isCustom && item.customName?.trim()
+              ? `${item.label}: ${item.customName.trim()}`
+              : item.customName?.trim() || item.label || item.id;
 
-          const displayLabel = item.customName?.trim() || item.label || item.id;
-          if (item.isCustom && item.customName?.trim()) {
-            doc.setFont("helvetica", "italic");
-            doc.text(`${item.label}: ${displayLabel}`, 30, yPosition);
-          } else {
-            doc.setFont("helvetica", "normal");
-            doc.text(`• ${displayLabel}`, 30, yPosition);
-          }
+          ensureSpace(6);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(10);
+          doc.text(displayLabel, fieldIndent, yPosition);
           yPosition += 6;
+
+          doc.setFont("helvetica", "normal");
+
+          if (item.answerType === "yesno") {
+            ensureSpace(6);
+            drawCheckbox(fieldIndent, yPosition, "Ja");
+            drawCheckbox(fieldIndent + 30, yPosition, "Nein");
+            yPosition += 8;
+          } else if (item.answerType === "multiselect") {
+            const options = (item.expandedContent || "")
+              .split("\n")
+              .map((option) => option.trim())
+              .filter(Boolean);
+            options.forEach((option) => {
+              ensureSpace(6);
+              drawCheckbox(fieldIndent, yPosition, option);
+              yPosition += 6;
+            });
+            yPosition += 2;
+          } else {
+            // Plain text answer: draw a blank line to fill out
+            ensureSpace(8);
+            doc.line(fieldIndent, yPosition + 4, 190, yPosition + 4);
+            yPosition += 10;
+          }
         });
 
         yPosition += 3; // Add spacing between sections
@@ -216,7 +246,8 @@ export default function CampPlanner() {
         >
           <button
             onClick={handleDownload}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-8 py-4 text-lg font-bold text-secondary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-secondary/90 active:scale-95"
+            disabled={campName.length === 0}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-8 py-4 text-lg font-bold text-secondary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-secondary/90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Download className="h-5 w-5" />
             PDF herunterladen
@@ -238,10 +269,10 @@ export default function CampPlanner() {
       <footer className="text-center text-sm text-muted-foreground mt-12 mb-6">
         {new Date().getFullYear()} Camp Trip Planner.
         <br />
-        <a href="/privacy.html" className="underline hover:text-primary">
+        <a href="/privacy.html" className="underline hover:text-primary mr-2">
           Datenschutzerklärung
         </a>
-        <a href="/imprint.html" className="underline hover:text-primary">
+        <a href="/imprint.html" className="underline hover:text-primary ml-2">
           Impressum
         </a>
       </footer>
