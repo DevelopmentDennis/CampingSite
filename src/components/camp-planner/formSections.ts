@@ -263,6 +263,12 @@ export const FORM_SECTIONS: FormSection[] = [
         emoji: "🧬",
         answerType: "yesno",
       },
+      {
+        id: "health-additional-info",
+        label: "Sonstige wichtige gesundheitliche Informationen",
+        emoji: "📝",
+        answerType: "text",
+      },
     ],
   },
   {
@@ -395,13 +401,13 @@ export const FORM_SECTIONS: FormSection[] = [
         label:
           "Mir ist bewusst, dass auch minderjährige Gruppenleitungen Aufsicht über mein Kind führen können",
         emoji: "👦",
-        answerType: "yesno",
+        answerType: "none",
       },
       {
         id: "misc-rule-violations",
         label: "Regelverstoße können zum Nachhauseschicken führen",
         emoji: "⚠️",
-        answerType: "yesno",
+        answerType: "none",
       },
       {
         id: "misc-medical-emergency",
@@ -414,13 +420,13 @@ export const FORM_SECTIONS: FormSection[] = [
         label:
           "Teilnehmende können sich in Freizeit ohne direkte Aufsicht in 3er-Gruppen frei bewegen",
         emoji: "🎯",
-        answerType: "yesno",
+        answerType: "none",
       },
       {
         id: "misc-eye-rolling",
         label: "Übermäßiges Augenrollen kann als Regelverstoß gewertet werden",
         emoji: "🙄",
-        answerType: "yesno",
+        answerType: "none",
       },
     ],
   },

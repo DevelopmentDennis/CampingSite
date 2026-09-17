@@ -114,11 +114,15 @@ export default function CampPlanner() {
               yPosition += 6;
             });
             yPosition += 2;
-          } else {
+          } else if (item.answerType === "text") {
             // Plain text answer: draw a blank line to fill out
             ensureSpace(8);
             doc.line(fieldIndent, yPosition + 4, 190, yPosition + 4);
             yPosition += 10;
+          } else if (item.answerType === "none") {
+            // No answer type: just add some spacing
+            ensureSpace(6);
+            yPosition += 6;
           }
         });
 
