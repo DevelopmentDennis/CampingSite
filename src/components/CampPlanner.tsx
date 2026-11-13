@@ -276,9 +276,6 @@ export default function CampPlanner() {
         <a href="/privacy.html" className="underline hover:text-primary mr-2">
           Datenschutzerklärung
         </a>
-        <a href="/imprint.html" className="underline hover:text-primary ml-2">
-          Impressum
-        </a>
       </footer>
     </div>
   );
